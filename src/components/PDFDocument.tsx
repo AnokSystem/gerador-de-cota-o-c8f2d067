@@ -300,42 +300,42 @@ const styles = StyleSheet.create({
   },
   // Client Data
   clientDataSection: {
-    marginBottom: 30,
-    padding: 16,
+    marginBottom: 20,
+    padding: 12,
     backgroundColor: '#ffffff',
-    borderRadius: 8,
+    borderRadius: 6,
     border: '1px solid #0088aa',
   },
   clientDataTitle: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: '#0088aa',
-    marginBottom: 12,
+    marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   clientDataGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 8,
   },
   clientDataItem: {
-    width: '48%',
-    marginBottom: 6,
+    width: '32%',
+    marginBottom: 4,
   },
   clientDataItemFull: {
     width: '100%',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   clientDataLabel: {
-    fontSize: 8,
+    fontSize: 7,
     color: '#999',
-    marginBottom: 2,
+    marginBottom: 1,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
   },
   clientDataValue: {
-    fontSize: 10,
+    fontSize: 9,
     color: '#333',
     fontFamily: 'Helvetica-Bold',
   },
@@ -512,9 +512,7 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
               )}
               <View style={styles.clientDataItemFull}>
                 <Text style={styles.clientDataLabel}>Endereço</Text>
-                <Text style={styles.clientDataValue}>
-                  {data.client.logradouro}, {data.client.numero} - {data.client.bairro}, {data.client.municipio}/{data.client.uf} - CEP: {data.client.cep}
-                </Text>
+                <Text style={styles.clientDataValue}>{data.client.logradouro}, {data.client.numero} - {data.client.bairro}, {data.client.municipio}/{data.client.uf} - CEP: {data.client.cep}</Text>
               </View>
             </View>
           </View>
