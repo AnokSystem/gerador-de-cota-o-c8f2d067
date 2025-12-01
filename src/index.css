@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 200 15% 8%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 15% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 15% 8%;
+
+    /* Folhita Brand Colors - Verde Neon */
+    --primary: 130 100% 50%;
+    --primary-foreground: 200 15% 8%;
+    
+    /* Cyan/Turquesa */
+    --secondary: 190 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Dark Background */
+    --dark: 200 15% 8%;
+    --dark-foreground: 0 0% 100%;
+
+    --muted: 200 10% 95%;
+    --muted-foreground: 200 5% 40%;
+
+    --accent: 130 100% 50%;
+    --accent-foreground: 200 15% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 10% 90%;
+    --input: 200 10% 90%;
+    --ring: 130 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(130 100% 50%), hsl(150 100% 45%));
+    --gradient-secondary: linear-gradient(135deg, hsl(190 100% 50%), hsl(200 100% 45%));
+    --gradient-dark: linear-gradient(180deg, hsl(200 15% 8%), hsl(200 20% 12%));
+    
+    /* Shadows */
+    --shadow-green: 0 10px 40px -10px hsl(130 100% 50% / 0.3);
+    --shadow-cyan: 0 10px 40px -10px hsl(190 100% 50% / 0.3);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 200 15% 8%;
+    --foreground: 0 0% 100%;
+
+    --card: 200 20% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 200 20% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 130 100% 50%;
+    --primary-foreground: 200 15% 8%;
+
+    --secondary: 190 100% 50%;
+    --secondary-foreground: 200 15% 8%;
+
+    --dark: 200 15% 8%;
+    --dark-foreground: 0 0% 100%;
+
+    --muted: 200 20% 15%;
+    --muted-foreground: 200 5% 60%;
+
+    --accent: 130 100% 50%;
+    --accent-foreground: 200 15% 8%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 20% 20%;
+    --input: 200 20% 20%;
+    --ring: 130 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,87 @@
+import { useState } from "react";
+import { CatalogForm } from "@/components/CatalogForm";
+import { PDFDocument } from "@/components/PDFDocument";
+import { CatalogData } from "@/types/catalog";
+import { pdf } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
+import logoFolhita from "@/assets/logo-folhita.png";
+import { toast } from "sonner";
+
+const Index = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerate = async (data: CatalogData) => {
+    setIsGenerating(true);
+    try {
+      const doc = <PDFDocument data={data} />;
+      const blob = await pdf(doc).toBlob();
+      saveAs(blob, `proposta-comercial-folhita-${Date.now()}.pdf`);
+      toast.success("PDF gerado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      toast.error("Erro ao gerar PDF. Tente novamente.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-dark relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-secondary/5 rounded-full blur-3xl" />
+      
+      {/* Diagonal Accent */}
+      <div className="absolute top-0 left-0 w-96 h-full bg-gradient-to-br from-primary/10 to-transparent" 
+           style={{ clipPath: 'polygon(0 0, 100% 0, 40% 100%, 0% 100%)' }} />
+      
+      <div className="relative z-10 container mx-auto px-4 py-12 max-w-4xl">
+        {/* Header */}
+        <header className="text-center mb-12 space-y-6">
+          <div className="flex justify-center mb-6 animate-in fade-in slide-in-from-top duration-700">
+            <img 
+              src={logoFolhita} 
+              alt="Folhita Comunicação Visual" 
+              className="h-16 w-auto drop-shadow-[0_0_20px_rgba(0,255,65,0.3)]"
+            />
+          </div>
+          
+          <div className="space-y-3 animate-in fade-in slide-in-from-top duration-700 delay-150">
+            <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-primary drop-shadow-lg">
+              Gerador de Catálogo
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Crie propostas comerciais profissionais em PDF para a{" "}
+              <span className="text-primary font-semibold">Folhita Comunicação Visual</span>
+            </p>
+          </div>
+        </header>
+
+        {/* Form */}
+        <div className="animate-in fade-in slide-in-from-bottom duration-700 delay-300">
+          {isGenerating ? (
+            <div className="flex flex-col items-center justify-center py-20 space-y-4">
+              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <p className="text-lg text-muted-foreground">Gerando seu catálogo...</p>
+            </div>
+          ) : (
+            <CatalogForm onGenerate={handleGenerate} />
+          )}
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-16 text-center text-sm text-muted-foreground space-y-2 animate-in fade-in duration-700 delay-500">
+          <p className="flex items-center justify-center gap-2">
+            <span className="h-px w-8 bg-primary/30" />
+            O maior outdoor de LED da Bahia
+            <span className="h-px w-8 bg-primary/30" />
+          </p>
+          <p>📱 73. 99921-9292 / 73. 99982-7391</p>
+          <p className="text-xs">© 2024 Folhita Comunicação Visual. Todos os direitos reservados.</p>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+export default Index;
