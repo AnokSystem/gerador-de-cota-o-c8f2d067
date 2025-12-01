@@ -104,11 +104,26 @@ const Index = () => {
                 </button>
               </div>
               <div className="w-full h-[600px] border border-border rounded-lg overflow-hidden bg-background">
-                <iframe
-                  src={pdfUrl}
+                <object
+                  data={pdfUrl}
+                  type="application/pdf"
                   className="w-full h-full"
-                  title="Visualização do PDF"
-                />
+                >
+                  <div className="flex flex-col items-center justify-center h-full space-y-4 p-8 text-center">
+                    <svg className="w-16 h-16 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-muted-foreground">
+                      Seu navegador não pode exibir o PDF.
+                    </p>
+                    <button
+                      onClick={handleDownload}
+                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                    >
+                      Clique aqui para baixar
+                    </button>
+                  </div>
+                </object>
               </div>
             </div>
           </div>
