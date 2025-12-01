@@ -301,40 +301,41 @@ const styles = StyleSheet.create({
   // Client Data
   clientDataSection: {
     marginBottom: 30,
-    padding: 20,
-    backgroundColor: '#f8f9fa',
+    padding: 16,
+    backgroundColor: '#ffffff',
     borderRadius: 8,
-    border: '1px solid #e0e0e0',
+    border: '1px solid #0088aa',
   },
   clientDataTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'Helvetica-Bold',
     color: '#0088aa',
-    marginBottom: 15,
+    marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   clientDataGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 15,
+    gap: 12,
   },
   clientDataItem: {
     width: '48%',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   clientDataItemFull: {
     width: '100%',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   clientDataLabel: {
-    fontSize: 9,
+    fontSize: 8,
     color: '#999',
-    marginBottom: 3,
+    marginBottom: 2,
     textTransform: 'uppercase',
+    letterSpacing: 0.3,
   },
   clientDataValue: {
-    fontSize: 11,
+    fontSize: 10,
     color: '#333',
     fontFamily: 'Helvetica-Bold',
   },
@@ -396,9 +397,6 @@ interface PDFDocumentProps {
 
 export const PDFDocument = ({ data }: PDFDocumentProps) => {
   const currentYear = new Date().getFullYear();
-  
-  console.log('Dados recebidos no PDFDocument:', data);
-  console.log('Cliente no PDFDocument:', data.client);
 
   return (
     <Document>
@@ -512,19 +510,10 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
                   <Text style={styles.clientDataValue}>{data.client.telefone}</Text>
                 </View>
               )}
-              {data.client.email && (
-                <View style={styles.clientDataItem}>
-                  <Text style={styles.clientDataLabel}>Email</Text>
-                  <Text style={styles.clientDataValue}>{data.client.email}</Text>
-                </View>
-              )}
               <View style={styles.clientDataItemFull}>
                 <Text style={styles.clientDataLabel}>Endereço</Text>
                 <Text style={styles.clientDataValue}>
-                  {data.client.logradouro}, {data.client.numero} - {data.client.bairro}
-                </Text>
-                <Text style={styles.clientDataValue}>
-                  {data.client.municipio}/{data.client.uf} - CEP: {data.client.cep}
+                  {data.client.logradouro}, {data.client.numero} - {data.client.bairro}, {data.client.municipio}/{data.client.uf} - CEP: {data.client.cep}
                 </Text>
               </View>
             </View>
