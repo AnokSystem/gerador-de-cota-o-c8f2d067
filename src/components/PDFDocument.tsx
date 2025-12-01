@@ -1,6 +1,49 @@
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import { CatalogData } from '@/types/catalog';
 
+// Helper function to format currency values
+const formatCurrency = (value: string): string => {
+  // Remove any existing currency symbols and whitespace
+  const cleanValue = value.replace(/[R$\s]/g, '');
+  
+  // If it's already formatted, return as is
+  if (cleanValue.includes(',') || cleanValue.includes('.')) {
+    // Ensure proper format: R$ 1.250,00
+    const numStr = cleanValue.replace(/\./g, '').replace(',', '.');
+    const num = parseFloat(numStr);
+    if (!isNaN(num)) {
+      return `R$ ${num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+  }
+  
+  // If it's a plain number, format it
+  const num = parseFloat(cleanValue);
+  if (!isNaN(num)) {
+    return `R$ ${num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+  
+  return value;
+};
+
+// Helper function to get last day of month
+const getLastDayOfMonth = (monthName: string): string => {
+  const months: { [key: string]: number } = {
+    'Janeiro': 0, 'Fevereiro': 1, 'Março': 2, 'Abril': 3,
+    'Maio': 4, 'Junho': 5, 'Julho': 6, 'Agosto': 7,
+    'Setembro': 8, 'Outubro': 9, 'Novembro': 10, 'Dezembro': 11
+  };
+  
+  const currentYear = new Date().getFullYear();
+  const monthIndex = months[monthName];
+  
+  if (monthIndex !== undefined) {
+    const lastDay = new Date(currentYear, monthIndex + 1, 0).getDate();
+    return `${lastDay} de ${monthName} de ${currentYear}`;
+  }
+  
+  return monthName;
+};
+
 const styles = StyleSheet.create({
   page: {
     backgroundColor: '#ffffff',
@@ -73,9 +116,6 @@ const styles = StyleSheet.create({
     bottom: 140,
     fontSize: 14,
     color: '#ffffff',
-  },
-  coverTaglineHighlight: {
-    color: '#00ff41',
     fontFamily: 'Helvetica-Bold',
   },
   logoBottom: {
@@ -331,10 +371,10 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
             comercial
           </Text>
           <Text style={styles.coverSubtitle}>
-            FOLHITA COMUNICAÇÃO VISUAL
+            FOLHITA COMUNICAÇÃO VISUAL E LED
           </Text>
           <Text style={styles.coverTagline}>
-            O <Text style={styles.coverTaglineHighlight}>MAIOR OUTDOOR DE LED</Text> DA BAHIA
+            O MAIOR OUTDOOR DE LED DA BAHIA
           </Text>
         </View>
       </Page>
@@ -398,7 +438,7 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
             <View>
               <View style={styles.proposalValiditySection}>
                 <Text style={styles.proposalValidityLabel}>Orçamento válido até</Text>
-                <Text style={styles.proposalValidityDate}>{data.validUntil}</Text>
+                <Text style={styles.proposalValidityDate}>{getLastDayOfMonth(data.validUntil)}</Text>
               </View>
               <Text style={styles.proposalNumber}>Número da proposta{'\n'}{data.proposalCode}</Text>
             </View>
@@ -420,7 +460,7 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
               <Text style={[styles.tableCellBold, styles.col1]}>{plan.duration}</Text>
               <Text style={[styles.tableCell, styles.col2]}>{plan.location}</Text>
               <Text style={[styles.tableCell, styles.col3]}>{plan.contractTime}</Text>
-              <Text style={[styles.tableCellBold, styles.col4]}>{plan.value}</Text>
+              <Text style={[styles.tableCellBold, styles.col4]}>{formatCurrency(plan.value)}</Text>
             </View>
           ))}
         </View>
@@ -434,11 +474,11 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
       <Page size="A4" style={styles.thanksPage}>
         <Text style={styles.thanksTitle}>Obrigado</Text>
         <Text style={styles.thanksText}>
-          Agradecemos imensamente por nos permitir apresentar a <Text style={styles.thanksHighlight}>Folhita Comunicação Visual!</Text> Estamos prontos para transformar sua marca com nossa comunicação de impacto, seja nos maiores outdoors de LED da Bahia ou com nossos materiais personalizados que deixam sua marca presente no dia a dia do seu público.
+          Agradecemos imensamente por nos permitir apresentar a <Text style={styles.thanksHighlight}>Folhita Comunicação Visual E LED!</Text> Estamos prontos para transformar sua marca com nossa comunicação de impacto, seja nos maiores outdoors de LED da Bahia ou com nossos materiais personalizados que deixam sua marca presente no dia a dia do seu público.
         </Text>
         <View style={styles.contactBox}>
           <Text style={styles.contactText}>
-            📱 <Text style={styles.contactNumber}>73. 99921-9292</Text> / <Text style={styles.contactNumber}>73. 99982-7391</Text>
+            📱 <Text style={styles.contactNumber}>73 9982-7391</Text>
           </Text>
         </View>
         <Text style={styles.footer}>
