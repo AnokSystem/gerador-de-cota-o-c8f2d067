@@ -298,6 +298,46 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
+  // Client Data
+  clientDataSection: {
+    marginBottom: 30,
+    padding: 20,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    border: '1px solid #e0e0e0',
+  },
+  clientDataTitle: {
+    fontSize: 14,
+    fontFamily: 'Helvetica-Bold',
+    color: '#0088aa',
+    marginBottom: 15,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  clientDataGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 15,
+  },
+  clientDataItem: {
+    width: '48%',
+    marginBottom: 8,
+  },
+  clientDataItemFull: {
+    width: '100%',
+    marginBottom: 8,
+  },
+  clientDataLabel: {
+    fontSize: 9,
+    color: '#999',
+    marginBottom: 3,
+    textTransform: 'uppercase',
+  },
+  clientDataValue: {
+    fontSize: 11,
+    color: '#333',
+    fontFamily: 'Helvetica-Bold',
+  },
   // Thank You Page
   thanksPage: {
     backgroundColor: '#0f1820',
@@ -446,6 +486,47 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
 
           <Text style={styles.proposalValidityTitle}>Validade da proposta</Text>
         </View>
+
+        {data.client && (
+          <View style={styles.clientDataSection}>
+            <Text style={styles.clientDataTitle}>Dados do Cliente</Text>
+            <View style={styles.clientDataGrid}>
+              <View style={styles.clientDataItemFull}>
+                <Text style={styles.clientDataLabel}>Razão Social</Text>
+                <Text style={styles.clientDataValue}>{data.client.nome}</Text>
+              </View>
+              <View style={styles.clientDataItem}>
+                <Text style={styles.clientDataLabel}>Nome Fantasia</Text>
+                <Text style={styles.clientDataValue}>{data.client.fantasia}</Text>
+              </View>
+              <View style={styles.clientDataItem}>
+                <Text style={styles.clientDataLabel}>CNPJ</Text>
+                <Text style={styles.clientDataValue}>{data.client.cnpj}</Text>
+              </View>
+              {data.client.telefone && (
+                <View style={styles.clientDataItem}>
+                  <Text style={styles.clientDataLabel}>Telefone</Text>
+                  <Text style={styles.clientDataValue}>{data.client.telefone}</Text>
+                </View>
+              )}
+              {data.client.email && (
+                <View style={styles.clientDataItem}>
+                  <Text style={styles.clientDataLabel}>Email</Text>
+                  <Text style={styles.clientDataValue}>{data.client.email}</Text>
+                </View>
+              )}
+              <View style={styles.clientDataItemFull}>
+                <Text style={styles.clientDataLabel}>Endereço</Text>
+                <Text style={styles.clientDataValue}>
+                  {data.client.logradouro}, {data.client.numero} - {data.client.bairro}
+                </Text>
+                <Text style={styles.clientDataValue}>
+                  {data.client.municipio}/{data.client.uf} - CEP: {data.client.cep}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
 
         <View style={styles.table}>
           <View style={styles.tableHeader}>
