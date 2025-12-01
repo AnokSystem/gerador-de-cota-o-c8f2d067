@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import { CatalogData } from '@/types/catalog';
+import logoFolhitaPdf from '@/assets/logo-folhita-pdf.png';
 
 // Helper function to format currency values
 const formatCurrency = (value: string): string => {
@@ -202,6 +203,17 @@ const styles = StyleSheet.create({
   },
   proposalHeader: {
     marginBottom: 25,
+    position: 'relative',
+  },
+  proposalHeaderContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  proposalLogo: {
+    width: 140,
+    height: 'auto',
+    objectFit: 'contain',
   },
   proposalTitle: {
     fontSize: 32,
@@ -468,7 +480,10 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
       {/* Proposal Page */}
       <Page size="A4" style={styles.proposalPage}>
         <View style={styles.proposalHeader}>
-          <Text style={styles.proposalTitle}>Proposta comercial</Text>
+          <View style={styles.proposalHeaderContent}>
+            <Text style={styles.proposalTitle}>Proposta comercial</Text>
+            <Image src={logoFolhitaPdf} style={styles.proposalLogo} />
+          </View>
           
           <View style={styles.proposalInfo}>
             <View>
