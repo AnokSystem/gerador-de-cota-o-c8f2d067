@@ -14,6 +14,8 @@ const Index = () => {
 
   const handleGenerate = async (data: CatalogData) => {
     setIsGenerating(true);
+    console.log('Dados recebidos no Index:', data);
+    console.log('Cliente no Index:', data.client);
     try {
       const doc = <PDFDocument data={data} />;
       const blob = await pdf(doc).toBlob();
