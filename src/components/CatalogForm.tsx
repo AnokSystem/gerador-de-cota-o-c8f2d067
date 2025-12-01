@@ -153,9 +153,6 @@ export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
       client: clientData || undefined
     };
     
-    console.log('Dados do catálogo sendo enviados:', catalogData);
-    console.log('Client data:', clientData);
-    
     onGenerate(catalogData);
     toast.success(`Gerando catálogo PDF - Código: ${proposalCode}`);
   };
