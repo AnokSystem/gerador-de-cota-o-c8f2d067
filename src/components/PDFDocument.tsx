@@ -208,10 +208,10 @@ const styles = StyleSheet.create({
   proposalHeaderContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   proposalLogo: {
-    width: 140,
+    width: 112,
     height: 'auto',
     objectFit: 'contain',
   },
