@@ -66,7 +66,7 @@ const Index = () => {
           
           <div className="space-y-3 animate-in fade-in slide-in-from-top duration-700 delay-150">
             <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-primary drop-shadow-lg">
-              Gerador de Catálogo
+              Gerador de Cotação
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Crie propostas comerciais profissionais em PDF para a{" "}
