@@ -396,6 +396,9 @@ interface PDFDocumentProps {
 
 export const PDFDocument = ({ data }: PDFDocumentProps) => {
   const currentYear = new Date().getFullYear();
+  
+  console.log('Dados recebidos no PDFDocument:', data);
+  console.log('Cliente no PDFDocument:', data.client);
 
   return (
     <Document>

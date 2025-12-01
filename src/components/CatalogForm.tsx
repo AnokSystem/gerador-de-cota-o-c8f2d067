@@ -145,13 +145,18 @@ export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
       value: formatValueWithCurrency(plan.value)
     }));
 
-    onGenerate({ 
+    const catalogData = { 
       validUntil, 
       plans: formattedPlans,
       proposalCode,
       location,
       client: clientData || undefined
-    });
+    };
+    
+    console.log('Dados do catálogo sendo enviados:', catalogData);
+    console.log('Client data:', clientData);
+    
+    onGenerate(catalogData);
     toast.success(`Gerando catálogo PDF - Código: ${proposalCode}`);
   };
 
