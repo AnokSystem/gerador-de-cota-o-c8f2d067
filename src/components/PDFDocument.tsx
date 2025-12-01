@@ -478,7 +478,7 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
         </Text>
         <View style={styles.contactBox}>
           <Text style={styles.contactText}>
-            📱 <Text style={styles.contactNumber}>73 9982-7391</Text>
+            <Text style={styles.contactNumber}>73 9982-7391</Text>
           </Text>
         </View>
         <Text style={styles.footer}>
