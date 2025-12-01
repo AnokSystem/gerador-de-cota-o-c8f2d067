@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     padding: 60,
   },
   proposalHeader: {
-    marginBottom: 40,
+    marginBottom: 25,
   },
   proposalTitle: {
     fontSize: 32,
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   // Client Data
   clientDataSection: {
-    marginBottom: 20,
+    marginBottom: 15,
     padding: 12,
     backgroundColor: '#ffffff',
     borderRadius: 6,
@@ -484,8 +484,6 @@ export const PDFDocument = ({ data }: PDFDocumentProps) => {
               <Text style={styles.proposalNumber}>Número da proposta{'\n'}{data.proposalCode}</Text>
             </View>
           </View>
-
-          <Text style={styles.proposalValidityTitle}>Validade da proposta</Text>
         </View>
 
         {data.client && (
