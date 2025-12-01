@@ -9,19 +9,37 @@ import { toast } from "sonner";
 
 const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const handleGenerate = async (data: CatalogData) => {
     setIsGenerating(true);
     try {
       const doc = <PDFDocument data={data} />;
       const blob = await pdf(doc).toBlob();
-      saveAs(blob, `proposta-comercial-folhita-${Date.now()}.pdf`);
+      
+      // Limpar URL anterior se existir
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+      
+      // Criar novo URL para visualização
+      const url = URL.createObjectURL(blob);
+      setPdfBlob(blob);
+      setPdfUrl(url);
+      
       toast.success("PDF gerado com sucesso!");
     } catch (error) {
       console.error("Erro ao gerar PDF:", error);
       toast.error("Erro ao gerar PDF. Tente novamente.");
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleDownload = () => {
+    if (pdfBlob) {
+      saveAs(pdfBlob, `proposta-comercial-folhita-${Date.now()}.pdf`);
     }
   };
 
@@ -68,6 +86,33 @@ const Index = () => {
             <CatalogForm onGenerate={handleGenerate} />
           )}
         </div>
+
+        {/* PDF Viewer */}
+        {pdfUrl && (
+          <div className="mt-12 animate-in fade-in slide-in-from-bottom duration-700">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-foreground">Visualizar PDF</h2>
+                <button
+                  onClick={handleDownload}
+                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all hover:scale-105 flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Baixar PDF
+                </button>
+              </div>
+              <div className="w-full h-[600px] border border-border rounded-lg overflow-hidden bg-background">
+                <iframe
+                  src={pdfUrl}
+                  className="w-full h-full"
+                  title="Visualização do PDF"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Footer */}
         <footer className="mt-16 text-center text-sm text-muted-foreground space-y-2 animate-in fade-in duration-700 delay-500">
