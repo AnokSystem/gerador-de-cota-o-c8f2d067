@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FiPlusCircle, FiTrash2, FiDownload, FiSearch } from "react-icons/fi";
 import { PlanData, CatalogData, ClientData } from "@/types/catalog";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface CatalogFormProps {
   onGenerate: (data: CatalogData) => void;
@@ -19,6 +21,13 @@ const months = [
 
 export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
   const [validUntil, setValidUntil] = useState("");
+  
+  // Define o mês atual automaticamente ao montar o componente
+  useEffect(() => {
+    const currentMonth = format(new Date(), "MMMM", { locale: ptBR });
+    const capitalizedMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
+    setValidUntil(capitalizedMonth);
+  }, []);
   const [plans, setPlans] = useState<PlanData[]>([
     { id: "1", duration: "10 SEG", location: "", contractTime: "30 dias", value: "" }
   ]);
