@@ -4,8 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FiPlusCircle, FiTrash2, FiDownload } from "react-icons/fi";
-import { PlanData, CatalogData } from "@/types/catalog";
+import { FiPlusCircle, FiTrash2, FiDownload, FiSearch } from "react-icons/fi";
+import { PlanData, CatalogData, ClientData } from "@/types/catalog";
 import { toast } from "sonner";
 
 interface CatalogFormProps {
@@ -22,6 +22,9 @@ export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
   const [plans, setPlans] = useState<PlanData[]>([
     { id: "1", duration: "10 SEG", location: "", contractTime: "30 dias", value: "" }
   ]);
+  const [cnpj, setCnpj] = useState("");
+  const [clientData, setClientData] = useState<ClientData | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   const addPlan = () => {
     const newPlan: PlanData = {
@@ -73,6 +76,56 @@ export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
     return `R$ ${value}`;
   };
 
+  const formatCNPJ = (value: string) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 14) {
+      return numbers.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+    return value;
+  };
+
+  const searchCNPJ = async () => {
+    const cleanCNPJ = cnpj.replace(/\D/g, '');
+    
+    if (cleanCNPJ.length !== 14) {
+      toast.error("CNPJ deve ter 14 dígitos");
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cleanCNPJ}`);
+      
+      if (!response.ok) {
+        throw new Error('CNPJ não encontrado');
+      }
+
+      const data = await response.json();
+      
+      const client: ClientData = {
+        cnpj: formatCNPJ(cleanCNPJ),
+        nome: data.razao_social || '',
+        fantasia: data.nome_fantasia || data.razao_social || '',
+        email: data.email || '',
+        telefone: data.ddd_telefone_1 || '',
+        logradouro: data.logradouro || '',
+        numero: data.numero || '',
+        bairro: data.bairro || '',
+        municipio: data.municipio || '',
+        uf: data.uf || '',
+        cep: data.cep || ''
+      };
+
+      setClientData(client);
+      toast.success("Dados da empresa carregados!");
+    } catch (error) {
+      toast.error("Erro ao buscar CNPJ. Verifique o número e tente novamente.");
+      console.error(error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   const handleGenerate = () => {
     if (!validUntil) {
       toast.error("Selecione o mês de validade");
@@ -96,7 +149,8 @@ export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
       validUntil, 
       plans: formattedPlans,
       proposalCode,
-      location
+      location,
+      client: clientData || undefined
     });
     toast.success(`Gerando catálogo PDF - Código: ${proposalCode}`);
   };
@@ -129,6 +183,82 @@ export const CatalogForm = ({ onGenerate }: CatalogFormProps) => {
               </SelectContent>
             </Select>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary/20 shadow-green">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl flex items-center gap-2">
+            <div className="h-8 w-1 bg-gradient-secondary rounded-full" />
+            Dados do Cliente
+          </CardTitle>
+          <CardDescription>
+            Busque os dados da empresa pelo CNPJ (opcional)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <div className="flex-1 space-y-2">
+              <Label htmlFor="cnpj">CNPJ</Label>
+              <Input
+                id="cnpj"
+                placeholder="00.000.000/0000-00"
+                value={cnpj}
+                onChange={(e) => setCnpj(formatCNPJ(e.target.value))}
+                maxLength={18}
+                className="border-primary/20 focus:ring-primary"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button 
+                onClick={searchCNPJ}
+                disabled={isSearching}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+              >
+                {isSearching ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    Buscando...
+                  </>
+                ) : (
+                  <>
+                    <FiSearch className="h-4 w-4" />
+                    Buscar
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+
+          {clientData && (
+            <div className="p-4 border border-primary/20 rounded-lg bg-muted/30 space-y-2">
+              <h4 className="font-semibold text-foreground mb-2">Dados Encontrados:</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Razão Social:</span>
+                  <p className="font-medium">{clientData.nome}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Nome Fantasia:</span>
+                  <p className="font-medium">{clientData.fantasia}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">CNPJ:</span>
+                  <p className="font-medium">{clientData.cnpj}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Telefone:</span>
+                  <p className="font-medium">{clientData.telefone || 'Não informado'}</p>
+                </div>
+                <div className="md:col-span-2">
+                  <span className="text-muted-foreground">Endereço:</span>
+                  <p className="font-medium">
+                    {clientData.logradouro}, {clientData.numero} - {clientData.bairro}, {clientData.municipio}/{clientData.uf} - CEP: {clientData.cep}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
