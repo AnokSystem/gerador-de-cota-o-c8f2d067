@@ -136,7 +136,7 @@ const Index = () => {
             O maior outdoor de LED da Bahia
             <span className="h-px w-8 bg-primary/30" />
           </p>
-          <p>📱 73 9982-7391</p>
+          <p>73 9982-7391</p>
           <p className="text-xs">© 2024 Folhita Comunicação Visual E LED. Todos os direitos reservados.</p>
         </footer>
       </div>
